@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.openclaw.mobile",
+      "bundleIdentifier": "com.jaylane.openclaw-mobile",
       "infoPlist": {
         "NSCameraUsageDescription": "OpenClaw uses your camera to send photos to the AI agent via node capabilities.",
         "NSLocationWhenInUseUsageDescription": "OpenClaw uses your location to respond to gateway location requests.",
@@ -34,7 +34,7 @@
         "foregroundImage": "./assets/images/android-icon-monochrome.png",
         "backgroundColor": "#0a0a0f"
       },
-      "package": "com.openclaw.mobile"
+      "package": "com.jaylane.openclaw_mobile"
     },
     "web": {
       "bundler": "metro",
