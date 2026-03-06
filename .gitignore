@@ -1,7 +1,7 @@
 node_modules/
 .expo/
 dist/
-web-build/
+.env
 *.jks
 *.p8
 *.p12
@@ -9,8 +9,5 @@ web-build/
 *.mobileprovision
 *.orig.*
 web-build/
-.env
-.env.local
-.env.production
-ios/
-android/
+.DS_Store
+*.tsbuildinfo
