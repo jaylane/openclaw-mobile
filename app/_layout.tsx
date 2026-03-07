@@ -1,3 +1,4 @@
+import '../src/polyfills'; // Must be first — sets up globalThis.crypto for Hermes
 import React, { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
