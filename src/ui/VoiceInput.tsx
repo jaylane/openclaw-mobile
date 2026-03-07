@@ -7,7 +7,6 @@ import {
   Animated,
   Alert,
 } from 'react-native';
-import { Audio } from 'expo-av';
 import { Colors, Spacing, Typography, Radius } from './theme';
 import { hapticMedium, hapticLight } from '../utils/haptics';
 

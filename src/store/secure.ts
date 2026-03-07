@@ -5,9 +5,9 @@
 
 import * as SecureStore from 'expo-secure-store';
 
-const KEY_GATEWAY_TOKEN = 'openclaw:gateway:token';
-const KEY_DEVICE_TOKEN = 'openclaw:device:token';
-const KEY_SAVED_GATEWAYS = 'openclaw:gateways';
+const KEY_GATEWAY_TOKEN = 'openclaw-gateway-token';
+const KEY_DEVICE_TOKEN = 'openclaw-device-token';
+const KEY_SAVED_GATEWAYS = 'openclaw-gateways';
 
 export interface SavedGateway {
   id: string;
@@ -20,29 +20,29 @@ export interface SavedGateway {
 // ─── Gateway Token ─────────────────────────────────────────────────────────
 
 export async function saveGatewayToken(gatewayId: string, token: string): Promise<void> {
-  await SecureStore.setItemAsync(`${KEY_GATEWAY_TOKEN}:${gatewayId}`, token);
+  await SecureStore.setItemAsync(`${KEY_GATEWAY_TOKEN}-${gatewayId}`, token);
 }
 
 export async function getGatewayToken(gatewayId: string): Promise<string | null> {
-  return SecureStore.getItemAsync(`${KEY_GATEWAY_TOKEN}:${gatewayId}`);
+  return SecureStore.getItemAsync(`${KEY_GATEWAY_TOKEN}-${gatewayId}`);
 }
 
 export async function deleteGatewayToken(gatewayId: string): Promise<void> {
-  await SecureStore.deleteItemAsync(`${KEY_GATEWAY_TOKEN}:${gatewayId}`);
+  await SecureStore.deleteItemAsync(`${KEY_GATEWAY_TOKEN}-${gatewayId}`);
 }
 
 // ─── Device Token (issued by gateway on first pair) ───────────────────────
 
 export async function saveDeviceToken(gatewayId: string, token: string): Promise<void> {
-  await SecureStore.setItemAsync(`${KEY_DEVICE_TOKEN}:${gatewayId}`, token);
+  await SecureStore.setItemAsync(`${KEY_DEVICE_TOKEN}-${gatewayId}`, token);
 }
 
 export async function getDeviceToken(gatewayId: string): Promise<string | null> {
-  return SecureStore.getItemAsync(`${KEY_DEVICE_TOKEN}:${gatewayId}`);
+  return SecureStore.getItemAsync(`${KEY_DEVICE_TOKEN}-${gatewayId}`);
 }
 
 export async function deleteDeviceToken(gatewayId: string): Promise<void> {
-  await SecureStore.deleteItemAsync(`${KEY_DEVICE_TOKEN}:${gatewayId}`);
+  await SecureStore.deleteItemAsync(`${KEY_DEVICE_TOKEN}-${gatewayId}`);
 }
 
 // ─── Saved Gateways List (non-sensitive, use AsyncStorage via SecureStore for simplicity) ─

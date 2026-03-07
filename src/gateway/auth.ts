@@ -11,9 +11,9 @@ import { V3SigningPayload } from './protocol';
 
 // ─── Keychain Keys ────────────────────────────────────────────────────────────
 
-const KEY_PRIVATE_KEY = 'openclaw:device:privateKey';
-const KEY_PUBLIC_KEY = 'openclaw:device:publicKey';
-const KEY_DEVICE_ID = 'openclaw:device:id';
+const KEY_PRIVATE_KEY = 'openclaw-device-privateKey';
+const KEY_PUBLIC_KEY = 'openclaw-device-publicKey';
+const KEY_DEVICE_ID = 'openclaw-device-id';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
