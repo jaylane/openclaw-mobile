@@ -46,36 +46,66 @@ export interface ConnectChallengePayload {
 }
 
 export interface ConnectParams {
+  minProtocol: number;
+  maxProtocol: number;
   client: {
-    platform: 'ios' | 'android' | 'web';
-    mode: 'operator' | 'node' | 'hybrid';
+    id: string;         // e.g. 'openclaw-ios'
+    displayName?: string;
     version: string;
+    platform: string;   // e.g. 'ios'
+    deviceFamily?: string;
+    mode: string;       // 'node' | 'webchat' | 'cli' | 'ui' | 'backend'
   };
-  role: 'operator' | 'node' | 'hybrid';
+  role?: string;
+  scopes?: string[];
   caps?: string[];
   commands?: string[];
-  auth: {
-    token: string;
+  auth?: {
+    token?: string;
+    deviceToken?: string;
   };
-  device: {
+  device?: {
     id: string;
     publicKey: string;
     signature: string;
-    family: 'mobile';
+    signedAt: number;   // ms timestamp
+    nonce: string;
   };
   pushToken?: string;
 }
 
-/** v3 signing payload — what gets signed with the Ed25519 private key */
+/** v3 signing payload fields — assembled into a pipe-delimited string before signing */
 export interface V3SigningPayload {
   deviceId: string;
   clientId: string;
+  clientMode: string;
   role: string;
   scopes: string[];
-  token: string;
+  signedAtMs: number;
+  token: string | null;
   nonce: string;
   platform: string;
   deviceFamily: string;
+}
+
+/**
+ * Build the v3 pipe-delimited signing payload string.
+ * Must match gateway's buildDeviceAuthPayloadV3 exactly.
+ */
+export function buildV3SigningPayload(p: V3SigningPayload): string {
+  return [
+    'v3',
+    p.deviceId,
+    p.clientId,
+    p.clientMode,
+    p.role,
+    p.scopes.join(','),
+    String(p.signedAtMs),
+    p.token ?? '',
+    p.nonce,
+    p.platform,
+    p.deviceFamily,
+  ].join('|');
 }
 
 export interface HelloOkPayload {

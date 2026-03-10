@@ -7,7 +7,7 @@
 
 import * as SecureStore from 'expo-secure-store';
 import * as Crypto from 'expo-crypto';
-import { V3SigningPayload } from './protocol';
+import { V3SigningPayload, buildV3SigningPayload } from './protocol';
 
 // ─── Keychain Keys ────────────────────────────────────────────────────────────
 
@@ -64,7 +64,9 @@ export async function signChallenge(payload: V3SigningPayload): Promise<string> 
     throw new Error('No private key found — device identity not initialized');
   }
 
-  const payloadBytes = new TextEncoder().encode(JSON.stringify(payload));
+  // v3 signs a pipe-delimited string, NOT JSON
+  const signingString = buildV3SigningPayload(payload);
+  const payloadBytes = new TextEncoder().encode(signingString);
   const privateKeyBytes = base64ToBytes(privateKeyBase64);
 
   const cryptoKey = await importEd25519PrivateKey(privateKeyBytes);

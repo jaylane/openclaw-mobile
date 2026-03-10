@@ -23,7 +23,8 @@ import {
 import { getOrCreateIdentity, signChallenge } from './auth';
 
 const APP_VERSION = '0.1.0';
-const CLIENT_SCOPES = ['chat', 'sessions', 'node', 'presence'];
+const PROTOCOL_VERSION = 3;
+const CLIENT_SCOPES = ['operator.admin'];
 
 export type GatewayState =
   | 'disconnected'
@@ -248,12 +249,16 @@ export class GatewayClient {
 
     try {
       const identity = await getOrCreateIdentity();
+      const signedAtMs = Date.now();
+      const role = 'node'; // mobile acts as a node (camera, location, etc.)
 
       const signingPayload = {
         deviceId: identity.id,
-        clientId: identity.id,
-        role: 'hybrid',
+        clientId: 'openclaw-ios',
+        clientMode: 'node',
+        role,
         scopes: CLIENT_SCOPES,
+        signedAtMs,
         token: this.config.token,
         nonce: challenge.nonce,
         platform: 'ios',
@@ -263,12 +268,18 @@ export class GatewayClient {
       const signature = await signChallenge(signingPayload);
 
       const connectParams: ConnectParams = {
+        minProtocol: PROTOCOL_VERSION,
+        maxProtocol: PROTOCOL_VERSION,
         client: {
-          platform: 'ios',
-          mode: 'hybrid',
+          id: 'openclaw-ios',
+          displayName: 'OpenClaw Mobile',
           version: APP_VERSION,
+          platform: 'ios',
+          deviceFamily: 'mobile',
+          mode: 'node',
         },
-        role: 'hybrid',
+        role,
+        scopes: CLIENT_SCOPES,
         caps: ['camera.snap', 'location.get', 'canvas.navigate', 'canvas.eval', 'canvas.snapshot'],
         commands: ['camera.snap', 'location.get', 'canvas.navigate', 'canvas.eval', 'canvas.snapshot'],
         auth: {
@@ -278,7 +289,8 @@ export class GatewayClient {
           id: identity.id,
           publicKey: identity.publicKey,
           signature,
-          family: 'mobile',
+          signedAt: signedAtMs,
+          nonce: challenge.nonce,
         },
         ...(this.config.pushToken ? { pushToken: this.config.pushToken } : {}),
       };
